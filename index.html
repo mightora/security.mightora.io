@@ -54,9 +54,46 @@
     </main>
   </div>
   <div id="status" class="toast" role="status" aria-live="polite"></div>
-  <div class="container quality"><p>Open source and independently inspectable. Automated build, security and licence evidence appears once a GitHub repository is published; no unverified badges are shown.</p><a href="https://github.com/mightora" target="_blank" rel="noopener noreferrer">Mightora on GitHub ↗</a></div>
-  <div class="container author-wrap"><mightora-author><div class="author-fallback"><img src="https://techtweedie.github.io/images/author/ian-tweedie-sq2_hu_a380911c6f4726de.png" alt="Ian Tweedie" width="70" height="70"><div><h2>Built by TechTweedie</h2><p>A free, open-source tool by Ian Tweedie, a UK-based technology consultant and developer. <a href="https://techtweedie.github.io">Visit the TechTweedie blog</a>.</p></div></div></mightora-author></div>
-  <mightora-footer><div class="container fallback-footer">Security Role Designer by <a href="https://mightora.io">Mightora</a> · Open-source tooling for architects and makers.</div></mightora-footer>
+  <section class="container quality" aria-labelledby="quality-title">
+    <div class="quality-intro"><div><span class="eyebrow dark">OPEN SOURCE &amp; TRANSPARENT</span><h2 id="quality-title">Inspect the evidence</h2><p>Built in the open. Review the source, licence, automated checks and deployment yourself. Automated checks are not a security certification.</p></div></div>
+    <div class="quality-badges" aria-label="Repository and build evidence">
+      <a class="evidence-badge" href="https://github.com/mightora/security.mightora.io" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">⌘</span><span>Source code <strong>GitHub</strong></span><span aria-hidden="true">↗</span></a>
+      <a class="evidence-badge" href="https://github.com/mightora/security.mightora.io/actions/workflows/ci.yml" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">✓</span><span>Build &amp; tests <strong>Workflow</strong></span><span aria-hidden="true">↗</span></a>
+      <a class="evidence-badge" href="https://github.com/mightora/security.mightora.io/actions/workflows/codeql.yml" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">◇</span><span>CodeQL <strong>Analysis</strong></span><span aria-hidden="true">↗</span></a>
+      <a class="evidence-badge" href="https://github.com/mightora/security.mightora.io/blob/main/LICENSE" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">§</span><span>Open licence <strong>MIT</strong></span><span aria-hidden="true">↗</span></a>
+      <a class="evidence-badge" href="https://github.com/mightora/security.mightora.io/actions/workflows/pages.yml" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">↑</span><span>Deployment <strong>Workflow</strong></span><span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+  <div class="container author-wrap">
+    <mightora-author>
+      <div class="author-section-overlay">
+        <div class="author-section-inner">
+          <div class="author-photos">
+            <img src="https://techtweedie.github.io/images/author/ian-tweedie-sq2_hu_a380911c6f4726de.png" alt="Ian Tweedie" class="author-avatar" width="84" height="84">
+            <img src="https://raw.githubusercontent.com/TechTweedie/techtweedie.github.io/v2/assets/images/site/main-logo.png" alt="TechTweedie" class="author-blog-logo">
+          </div>
+          <div class="author-text">
+            <h2 class="author-heading">Built by TechTweedie</h2>
+            <p class="author-bio">Security Role Designer is a free, open-source tool by <strong>Ian Tweedie</strong>, also known as <strong>TechTweedie</strong>. Ian is a technology consultant and developer based in North East England, building practical tools for the Power Platform community.</p>
+            <div class="author-links">
+              <a class="author-link" href="https://techtweedie.github.io" target="_blank" rel="noopener noreferrer">Technical blog ↗</a>
+              <a class="author-link" href="https://github.com/itweedie" target="_blank" rel="noopener noreferrer">GitHub profile ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mightora-author>
+  </div>
+  <mightora-footer local-yaml-url="./footer.yaml">
+    <div class="container">
+      <div class="footer-bottom">
+        <div class="footer-copy">© <span class="footer-year">2026</span> Security Role Designer by <a href="https://mightora.io" target="_blank" rel="noopener noreferrer">Mightora</a>. Free and open-source under the <a href="https://github.com/mightora/security.mightora.io/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT licence</a>.</div>
+        <div class="footer-bottom-links">
+          <span class="site-footer__note">Local-first modelling · No account required · <a href="https://github.com/mightora/security.mightora.io" target="_blank" rel="noopener noreferrer">View source ↗</a></span>
+        </div>
+      </div>
+    </div>
+  </mightora-footer>
   <script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/gh/mightora/shared-ui@main/components.js" defer></script>
   <script type="module" src="./src/app.js"></script>

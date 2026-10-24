@@ -1,0 +1,48 @@
+# Validated, local snapshot of the Mightora shared footer navigation.
+# This avoids a runtime dependency on a mutable remote YAML feed.
+brands:
+  - name: "Mightora"
+    url: "https://mightora.io"
+    logo: "https://raw.githubusercontent.com/mightora/mightora.io/main/static/images/mightoraIoLogo4-200x900.png"
+    description: "Free tools for the Power Platform community"
+  - name: "TechTweedie"
+    url: "https://techtweedie.github.io"
+    logo: "https://raw.githubusercontent.com/mightora/mightora.io/main/static/images/TechTweedie_bw.png"
+    description: "Technical blog and tutorials"
+sections:
+  - title: "Mightora"
+    column: 1
+    position: 1
+    links:
+      - name: "All tools"
+        url: "https://mightora.io/tools/"
+      - name: "About"
+        url: "https://mightora.io/about/"
+      - name: "Contact"
+        url: "https://mightora.io/contact/"
+      - name: "Privacy policy"
+        url: "https://mightora.io/privacy-policy/"
+  - title: "Power Platform tools"
+    column: 2
+    position: 1
+    links:
+      - name: "Solution Explorer"
+        url: "https://solution-explorer.mightora.io/"
+      - name: "Security Role Designer"
+        url: "https://security.mightora.io/"
+      - name: "Technology Radar"
+        url: "https://radar.mightora.io/"
+      - name: "Architecture Modeller"
+        url: "https://architecture-modeller.mightora.io/"
+  - title: "Community and source"
+    column: 3
+    position: 1
+    links:
+      - name: "Mightora on GitHub"
+        url: "https://github.com/mightora"
+      - name: "Security Role Designer source"
+        url: "https://github.com/mightora/security.mightora.io"
+      - name: "TechTweedie blog"
+        url: "https://techtweedie.github.io/"
+      - name: "MIT licence"
+        url: "https://github.com/mightora/security.mightora.io/blob/main/LICENSE"
