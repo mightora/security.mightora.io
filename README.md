@@ -49,3 +49,7 @@ The `CNAME` file configures the intended custom domain (`security.mightora.io`) 
 ## Licence
 
 MIT — see [LICENSE](LICENSE).
+
+## Visual security explorer
+
+Three client-side, interactive visualisations are available: business-unit hierarchy, role-to-table privilege map, and privilege depth heatmap. Select nodes to inspect roles or business units, filter by role/business unit/table/action/depth, and export the current visualisation as editable vector SVG. All rendering is deterministic and computed from the local model; missing team/user assignments are never guessed, and these diagrams are not effective-access verification. Word/PowerPoint export and live Dataverse record access checks remain future enhancements.

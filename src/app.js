@@ -1,4 +1,5 @@
 import { ACTIONS, LEVELS, EMPTY_PERMISSIONS, newRole, demoModel, validateModel, compareRoles, reviewRole, privilegeCSV } from './model.js';
+import { hierarchySVG, relationshipSVG, heatmapSVG, heatmapRows, esc } from './visuals.js';
 
 const $ = (id) => document.getElementById(id);
 const state = { model: demoModel(), roleId: 'claims-handler', comparisonId: 'claims-supervisor', view: 'roles', dirty: false };
@@ -29,6 +30,7 @@ function render() {
   if (state.view === 'compare') renderCompare();
   if (state.view === 'review') renderReview();
   if (state.view === 'map') renderMap();
+  if (state.view === 'visuals') renderVisuals();
   if (state.view === 'export') renderExport();
 }
 function renderRoles() {
@@ -84,6 +86,45 @@ function readFile(file) {
     persist(); render(); notification('Model imported and validated locally.');
   }).catch(e=>notification(`Import failed: ${e.message}`,true));
 }
+
+
+const visualState={type:'hierarchy',role:'',bu:'',action:'Read',depth:0,table:''};
+function renderVisuals(){
+ const model=state.model;
+ const roleSelect=$('visual-role'), buSelect=$('visual-bu');
+ const oldRole=visualState.role,oldBU=visualState.bu;
+ roleSelect.innerHTML='<option value="">All roles</option>'+model.roles.map(r=>`<option value="${escape(r.id)}">${escape(r.name)}</option>`).join('');
+ buSelect.innerHTML='<option value="">All units</option>'+(model.businessUnits||[]).map(u=>`<option value="${escape(u.name)}">${escape(u.name)}</option>`).join('');
+ roleSelect.value=model.roles.some(r=>r.id===oldRole)?oldRole:'';buSelect.value=(model.businessUnits||[]).some(u=>u.name===oldBU)?oldBU:'';
+ visualState.role=roleSelect.value;visualState.bu=buSelect.value;
+ document.querySelectorAll('[data-visual]').forEach(b=>{b.classList.toggle('active',b.dataset.visual===visualState.type);b.setAttribute('aria-pressed',String(b.dataset.visual===visualState.type));});
+ const canvas=$('visual-canvas');
+ const scoped={...model,roles:model.roles.filter(r=>(!visualState.role||r.id===visualState.role)&&(!visualState.bu||r.businessUnit===visualState.bu))};
+ let svg='';
+ if(visualState.type==='hierarchy'){svg=hierarchySVG(model);$('visual-summary').textContent=(model.businessUnits||[]).length+' business units · '+(model.teams||[]).length+' teams';}
+ if(visualState.type==='relationships'){svg=relationshipSVG(scoped);$('visual-summary').textContent=scoped.roles.length+' roles · '+model.tables.length+' tables';}
+ if(visualState.type==='heatmap'){svg=heatmapSVG(scoped,'',visualState.table,visualState.action,visualState.depth);const rows=heatmapRows(scoped,'',visualState.table,visualState.action,visualState.depth);$('visual-summary').textContent=rows.reduce((n,r)=>n+r.cells.length,0)+' matching cells';}
+ canvas.innerHTML=svg;
+ canvas.dataset.svg=svg;
+ $('visual-details').textContent='Select a business unit, role or table node to inspect the available model details. Nodes are representations of configured metadata.';
+}
+function saveVisualSVG(){
+ const source=$('visual-canvas').dataset.svg;if(!source)return;
+ download('mightora-security-'+visualState.type+'.svg',source,'image/svg+xml;charset=utf-8');
+}
+document.querySelectorAll('[data-visual]').forEach(b=>b.addEventListener('click',()=>{visualState.type=b.dataset.visual;renderVisuals();}));
+for(const [id,key] of [['visual-role','role'],['visual-bu','bu'],['visual-action','action'],['visual-depth','depth'],['visual-table-search','table']]){
+ $(id).addEventListener(id==='visual-table-search'?'input':'change',e=>{visualState[key]=key==='depth'?Number(e.target.value):e.target.value;renderVisuals();});
+}
+$('visual-svg').addEventListener('click',saveVisualSVG);
+function inspectNode(node){
+ const kind=node.dataset.kind,id=node.dataset.id,m=state.model;
+ if(kind==='role'){const r=m.roles.find(x=>x.id===id);visualState.role=id;visualState.type='relationships';renderVisuals();$('visual-details').textContent=r?'Role: '+r.name+' · Business unit: '+(r.businessUnit||'not specified')+' · Permissions are configured, not effective access.':'Role not found';}
+ else if(kind==='unit'){const u=m.businessUnits?.find(x=>x.id===id);visualState.bu=u?.name||'';visualState.type='relationships';renderVisuals();$('visual-details').textContent='Business unit: '+(u?.name||id)+' · Parent: '+(u?.parentId||'root')+' · Role matches use stored business-unit names.';}
+ else if(kind==='table'){const t=m.tables.find(x=>x.id===id);$('visual-details').textContent=t?'Table: '+t.name+' ('+t.id+') · Ownership: '+t.ownership:'Table not found';}
+}
+$('visual-canvas').addEventListener('click',e=>{const node=e.target.closest('.graph-node');if(node)inspectNode(node);});
+$('visual-canvas').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){const node=e.target.closest('.graph-node');if(node){e.preventDefault();inspectNode(node);}}});
 
 document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click',()=> { state.view=b.dataset.view; render(); }));
 $('role-picker').addEventListener('change',e=>{state.roleId=e.target.value;render();});

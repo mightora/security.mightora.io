@@ -31,6 +31,7 @@
         <button data-view="compare"><span aria-hidden="true">⇄</span> Compare roles</button>
         <button data-view="review"><span aria-hidden="true">◇</span> Security review</button>
         <button data-view="map"><span aria-hidden="true">⌘</span> Security model</button>
+        <button data-view="visuals"><span aria-hidden="true">◉</span> Visual explorer</button>
         <button data-view="export"><span aria-hidden="true">⇩</span> Export & privacy</button>
       </nav>
       <div class="sidebar-info"><strong>Private by design</strong><p>No account required. Models are processed locally. Export a backup before clearing browser data.</p><span id="saved">Example loaded</span></div>
@@ -49,6 +50,28 @@
       <section data-page="review" hidden><div class="section-heading"><div><div class="eyebrow dark">03 / ADVISORY REVIEW</div><h2>Potential access risks</h2><p>Configurable review concepts, not authoritative security findings.</p></div></div><div class="card"><div class="review-summary"><div><small>Role under review</small><h3 id="review-role"></h3></div><div><strong id="finding-count">0</strong><small>Advisory observations</small></div></div><div id="findings"></div><div class="disclaimer">A role-level review cannot establish a user's effective record access. Check team roles, sharing, hierarchy security and live conditions separately.</div></div></section>
 
       <section data-page="map" hidden><div class="section-heading"><div><div class="eyebrow dark">04 / SECURITY MODEL</div><h2>Business-unit context</h2><p>Visible context from the model. Missing assignments are never inferred.</p></div></div><div class="model-grid"><div class="card"><h3>Business units</h3><ul class="model-list" id="business-units"></ul></div><div class="card"><h3>Role assignments</h3><ul class="model-list" id="assignments"></ul></div></div><div class="disclaimer">Full team and principal relationship editing, graphical maps and access simulation are planned for a later release.</div></section>
+
+      <section data-page="visuals" hidden>
+        <div class="section-heading"><div><div class="eyebrow dark">05 / VISUAL SECURITY</div><h2>Visual security explorer</h2><p>Explore business units, configured role-to-table grants and privilege depth. These are model representations, not verified effective access.</p></div></div>
+        <div class="card">
+          <div class="visual-tabs" role="group" aria-label="Visualisation type">
+            <button type="button" data-visual="hierarchy" class="active">Business-unit hierarchy</button>
+            <button type="button" data-visual="relationships">Role and permissions map</button>
+            <button type="button" data-visual="heatmap">Security heatmap</button>
+          </div>
+          <div class="visual-filters">
+            <label>Role <select id="visual-role"><option value="">All roles</option></select></label>
+            <label>Business unit <select id="visual-bu"><option value="">All units</option></select></label>
+            <label>Privilege <select id="visual-action"><option>Read</option><option>Create</option><option>Write</option><option>Delete</option><option>Append</option><option>Append To</option><option>Assign</option><option>Share</option></select></label>
+            <label>Minimum depth <select id="visual-depth"><option value="0">All</option><option value="1">User+</option><option value="2">Business Unit+</option><option value="3">Parent:Child+</option><option value="4">Organisation only</option></select></label>
+            <label>Search tables <input type="search" id="visual-table-search" placeholder="Table name or logical name"></label>
+          </div>
+          <div class="visual-actions"><button type="button" id="visual-svg" class="outline-button dark-button">Export current diagram as SVG</button><span id="visual-summary" role="status"></span></div>
+          <div class="visual-canvas" id="visual-canvas" tabindex="0" aria-label="Security visualisation; scroll to pan wide diagrams"></div>
+          <div id="visual-details" class="disclaimer" aria-live="polite">Select a node for more information. Diagram nodes reflect only explicitly modelled data.</div>
+        </div>
+        <p class="disclaimer">Modelled role privileges, ownership types, business units and assignment metadata may be incomplete. No diagram can establish a user's effective record access without further live checks.</p>
+      </section>
 
       <section data-page="export" hidden><div class="section-heading"><div><div class="eyebrow dark">05 / EXPORT</div><h2>Your model, your data</h2><p>Download your complete model or the selected role's editable CSV matrix.</p></div></div><div class="export-grid"><div class="card"><span class="export-icon">{ }</span><h3>Mightora Security JSON</h3><p>A complete, reusable model for backup and future integration with other Mightora tools.</p><button class="primary-button" id="export-json">Download JSON</button></div><div class="card"><span class="export-icon">▤</span><h3>Role privilege CSV</h3><p>Editable table privileges for <strong id="export-role-name"></strong>, ready for Excel or review.</p><button class="outline-button dark-button" id="export-csv">Download CSV</button></div></div><div class="card privacy"><h3>Network transparency</h3><p>Model editing, comparison, review and export run locally. The online edition loads Mightora shared styling/components and an author image from external hosts. These requests are unrelated to uploaded model contents. The offline edition bundles these assets locally.</p><p>To inspect requests, open browser Developer Tools (F12), select Network, enable Preserve log and reload. The on-screen description is not an independent network audit.</p></div></section>
     </main>
