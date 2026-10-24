@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {demoModel, validateModel, compareRoles, reviewRole, privilegeCSV, newRole} from '../src/model.js';
+test('sample model validates',()=>assert.equal(validateModel(demoModel()).roles.length,2));
+test('comparison reveals increased access',()=>{const m=demoModel();const c=compareRoles(m.roles[0],m.roles[1],m.tables);assert.equal(c.length,3);assert(c.every(x=>x.delta===1));});
+test('review flags broad read',()=>{const m=demoModel();assert(reviewRole(m.roles[1],m.tables).some(x=>x.message.includes('Organisation-wide Read')));});
+test('rejects unsupported schema',()=>assert.throws(()=>validateModel({...demoModel(),schemaVersion:'2.0.0'})));
+test('rejects invalid privilege',()=>{const m=demoModel();m.roles[0].privileges.contact.Read=99;assert.throws(()=>validateModel(m));});
+test('rejects invalid organisation-owned depth',()=>{const m=demoModel();m.tables[0].ownership='organisation';assert.throws(()=>validateModel(m));});
+test('csv exports all standard actions',()=>{const m=demoModel();const csv=privilegeCSV(m,m.roles[0]);assert(csv.includes('Append To'));assert(csv.includes('Business Unit'));});
+test('new role has independent defaults',()=>{const role=newRole('Operator','operator');assert.equal(role.name,'Operator');assert.deepEqual(role.privileges,{});});

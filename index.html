@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Design, review and compare Dataverse security roles privately in your browser.">
+  <meta name="theme-color" content="#092a32">
+  <title>Security Role Designer | Mightora</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mightora/shared-ui@main/shared.css">
+  <link rel="stylesheet" href="./src/styles.css">
+</head>
+<body>
+  <mightora-header site-name="Security Role Designer" site-url="./" logo-light="https://raw.githubusercontent.com/mightora/mightora.io/main/static/images/mightoraIoLogo4-200x900.png" logo-dark="https://raw.githubusercontent.com/mightora/mightora.io/main/static/images/mightoraIoLogo4-200x900.png" nav-links='[{"label":"Mightora","url":"https://mightora.io","ext":true}]'></mightora-header>
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="eyebrow">MIGHTORA / POWER PLATFORM TOOLKIT</div>
+        <h1>Security, made <em>visible.</em></h1>
+        <p>Design and compare Dataverse security roles, explain privilege changes and review potential access risks. Your model stays in your browser.</p>
+        <div class="hero-actions"><label class="primary-button" for="import-json">Import Mightora JSON <span aria-hidden="true">↗</span></label><button id="new-model" class="outline-button">Start blank</button><button id="demo-model" class="subtle-button">Load example</button></div>
+        <input id="import-json" type="file" accept=".json,application/json" class="visually-hidden" aria-label="Import a Mightora security model JSON file">
+      </div>
+      <div class="hero-panel" aria-label="Application capabilities"><div class="panel-top"><span class="live-dot"></span> LOCAL-FIRST DESIGN WORKSPACE</div><div class="hero-metric"><strong>8</strong><span>Dataverse table privileges</span></div><div class="panel-divider"></div><div class="hero-metric"><strong>5</strong><span>Access depth levels</span></div><div class="panel-divider"></div><div class="hero-metric"><strong>0</strong><span>Model uploads required</span></div></div>
+    </div>
+  </header>
+  <div class="container workspace-layout">
+    <aside class="sidebar" aria-label="Workspace navigation">
+      <div class="sidebar-heading">WORKSPACE</div>
+      <nav class="side-nav">
+        <button data-view="roles" class="active"><span aria-hidden="true">▦</span> Role designer</button>
+        <button data-view="compare"><span aria-hidden="true">⇄</span> Compare roles</button>
+        <button data-view="review"><span aria-hidden="true">◇</span> Security review</button>
+        <button data-view="map"><span aria-hidden="true">⌘</span> Security model</button>
+        <button data-view="export"><span aria-hidden="true">⇩</span> Export & privacy</button>
+      </nav>
+      <div class="sidebar-info"><strong>Private by design</strong><p>No account required. Models are processed locally. Export a backup before clearing browser data.</p><span id="saved">Example loaded</span></div>
+    </aside>
+    <main class="main-workspace" id="main">
+      <div class="workspace-top"><div><div class="eyebrow dark">CURRENT MODEL</div><label for="model-name" class="visually-hidden">Model name</label><input id="model-name" class="model-title" value="Claims Handling — example" maxlength="300"></div><div class="stat-group"><div><strong id="role-count">2</strong><small>Roles</small></div><div><strong id="table-count">3</strong><small>Tables</small></div><div><strong id="model-source">Synthetic example</strong><small>Source</small></div></div></div>
+
+      <section data-page="roles">
+        <div class="section-heading"><div><div class="eyebrow dark">01 / ROLE DESIGNER</div><h2>Privilege matrix</h2><p>Set access depth per table and operation. Changes are saved in this browser.</p></div><button id="add-role" class="primary-button">+ New role</button></div>
+        <div id="role-details" class="card"><div class="form-grid"><div><label for="role-picker">Select role</label><select id="role-picker"></select></div><div><label for="role-name">Role name</label><input id="role-name" maxlength="300"></div><div><label for="role-bu">Business unit</label><input id="role-bu" maxlength="200"></div></div><div class="role-actions"><button id="clone-role" class="outline-button dark-button">Duplicate role</button><button id="delete-role" class="text-danger">Delete role</button></div><label for="role-notes">Design rationale and notes</label><textarea id="role-notes" rows="2" maxlength="3000" placeholder="Why does this role need these permissions?"></textarea></div>
+        <div class="matrix-card"><div class="matrix-toolbar"><div><h3>Table permissions</h3><p>Organisation-owned tables allow None or Organisation only.</p></div><div class="toolbar-actions"><button id="add-table" class="outline-button dark-button">+ Add table</button><label for="table-filter" class="visually-hidden">Filter tables</label><input id="table-filter" type="search" placeholder="Find a table…"></div></div><div class="table-scroll"><table class="matrix"><thead><tr><th scope="col">Table</th><th scope="col">Create</th><th scope="col">Read</th><th scope="col">Write</th><th scope="col">Delete</th><th scope="col">Append</th><th scope="col">Append To</th><th scope="col">Assign</th><th scope="col">Share</th></tr></thead><tbody id="privilege-body"></tbody></table></div><div class="legend"><span><i class="dot none"></i> None</span><span><i class="dot user"></i> User</span><span><i class="dot bu"></i> Business Unit</span><span><i class="dot pc"></i> Parent:Child</span><span><i class="dot org"></i> Organisation</span></div></div>
+      </section>
+
+      <section data-page="compare" hidden><div class="section-heading"><div><div class="eyebrow dark">02 / COMPARE</div><h2>Role comparison</h2><p>See exactly where permissions increase or decrease between two roles.</p></div></div><div class="card form-grid two"><div><label for="base-role">Baseline</label><select id="base-role"></select></div><div><label for="target-role">Compare against</label><select id="target-role"></select></div></div><div class="matrix-card"><div class="matrix-toolbar"><h3 id="comparison-summary"></h3></div><div class="table-scroll"><table class="data-table"><thead><tr><th>Table</th><th>Privilege</th><th>Baseline</th><th>Compared</th><th>Change</th></tr></thead><tbody id="comparison-body"></tbody></table></div></div></section>
+
+      <section data-page="review" hidden><div class="section-heading"><div><div class="eyebrow dark">03 / ADVISORY REVIEW</div><h2>Potential access risks</h2><p>Configurable review concepts, not authoritative security findings.</p></div></div><div class="card"><div class="review-summary"><div><small>Role under review</small><h3 id="review-role"></h3></div><div><strong id="finding-count">0</strong><small>Advisory observations</small></div></div><div id="findings"></div><div class="disclaimer">A role-level review cannot establish a user's effective record access. Check team roles, sharing, hierarchy security and live conditions separately.</div></div></section>
+
+      <section data-page="map" hidden><div class="section-heading"><div><div class="eyebrow dark">04 / SECURITY MODEL</div><h2>Business-unit context</h2><p>Visible context from the model. Missing assignments are never inferred.</p></div></div><div class="model-grid"><div class="card"><h3>Business units</h3><ul class="model-list" id="business-units"></ul></div><div class="card"><h3>Role assignments</h3><ul class="model-list" id="assignments"></ul></div></div><div class="disclaimer">Full team and principal relationship editing, graphical maps and access simulation are planned for a later release.</div></section>
+
+      <section data-page="export" hidden><div class="section-heading"><div><div class="eyebrow dark">05 / EXPORT</div><h2>Your model, your data</h2><p>Download your complete model or the selected role's editable CSV matrix.</p></div></div><div class="export-grid"><div class="card"><span class="export-icon">{ }</span><h3>Mightora Security JSON</h3><p>A complete, reusable model for backup and future integration with other Mightora tools.</p><button class="primary-button" id="export-json">Download JSON</button></div><div class="card"><span class="export-icon">▤</span><h3>Role privilege CSV</h3><p>Editable table privileges for <strong id="export-role-name"></strong>, ready for Excel or review.</p><button class="outline-button dark-button" id="export-csv">Download CSV</button></div></div><div class="card privacy"><h3>Network transparency</h3><p>Model editing, comparison, review and export run locally. The online edition loads Mightora shared styling/components and an author image from external hosts. These requests are unrelated to uploaded model contents. The offline edition bundles these assets locally.</p><p>To inspect requests, open browser Developer Tools (F12), select Network, enable Preserve log and reload. The on-screen description is not an independent network audit.</p></div></section>
+    </main>
+  </div>
+  <div id="status" class="toast" role="status" aria-live="polite"></div>
+  <div class="container quality"><p>Open source and independently inspectable. Automated build, security and licence evidence appears once a GitHub repository is published; no unverified badges are shown.</p><a href="https://github.com/mightora" target="_blank" rel="noopener noreferrer">Mightora on GitHub ↗</a></div>
+  <div class="container author-wrap"><mightora-author><div class="author-fallback"><img src="https://techtweedie.github.io/images/author/ian-tweedie-sq2_hu_a380911c6f4726de.png" alt="Ian Tweedie" width="70" height="70"><div><h2>Built by TechTweedie</h2><p>A free, open-source tool by Ian Tweedie, a UK-based technology consultant and developer. <a href="https://techtweedie.github.io">Visit the TechTweedie blog</a>.</p></div></div></mightora-author></div>
+  <mightora-footer><div class="container fallback-footer">Security Role Designer by <a href="https://mightora.io">Mightora</a> · Open-source tooling for architects and makers.</div></mightora-footer>
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/gh/mightora/shared-ui@main/components.js" defer></script>
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>
